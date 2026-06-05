@@ -53,15 +53,32 @@ function saveState() {
   try { localStorage.setItem('tarot_state', JSON.stringify(toSave)); } catch(e) {}
 }
 
+function syncLevelProgress(levelNum) {
+  const info = LEVEL_INFO.find(l => l.num === Number(levelNum));
+  const prog = STATE.progress[levelNum];
+  if (!info || !prog || !info.total) return;
+
+  if ((prog.answered || 0) >= info.total) {
+    prog.completed = true;
+    STATE.level = Math.max(STATE.level || 1, info.num + 1);
+  }
+}
+
+function syncAllProgress() {
+  LEVEL_INFO.forEach(l => {
+    if (!STATE.progress[l.num]) STATE.progress[l.num] = { answered:0, correct:0, completed:false };
+    syncLevelProgress(l.num);
+  });
+}
+
 function loadState() {
   try {
     const saved = localStorage.getItem('tarot_state');
     if (saved) Object.assign(STATE, JSON.parse(saved));
   } catch(e) {}
   if (!STATE.completedLessons) STATE.completedLessons = [];
-  LEVEL_INFO.forEach(l => {
-    if (!STATE.progress[l.num]) STATE.progress[l.num] = { answered:0, correct:0, completed:false };
-  });
+  syncAllProgress();
+  saveState();
 }
 
 // ─── Audio ───────────────────────────────────────────────────────
@@ -225,7 +242,7 @@ function updateProgressBar() {
   const bar=document.getElementById('progress-fill');
   if (bar) bar.style.width=pct+'%';
   const lbl=document.getElementById('progress-label');
-  if (lbl&&info&&info.total) lbl.textContent=`${prog.answered}/${info.total}`;
+  if (lbl&&info&&info.total) lbl.textContent=`${Math.min(prog.answered||0,info.total)}/${info.total}`;
 }
 
 // ─── Render Question ─────────────────────────────────────────────
@@ -272,8 +289,6 @@ function renderQuestion(q) {
     <div class="options-grid">${optHtml}</div>
     <div id="explanation-box" class="explanation-box hidden"></div>`;
 
-  const prog=STATE.progress[STATE.currentLevel];
-  if (prog) { prog.answered=(prog.answered||0)+1; saveState(); }
   updateProgressBar();
 }
 
@@ -299,7 +314,12 @@ function handleAnswer(idx) {
       <button class="next-btn" onclick="nextQuestion()">ต่อไป →</button>`;
   }
 
-  if (correct) STATE.progress[STATE.currentLevel].correct=(STATE.progress[STATE.currentLevel].correct||0)+1;
+  const prog = STATE.progress[STATE.currentLevel];
+  if (prog) {
+    prog.answered = (prog.answered || 0) + 1;
+    if (correct) prog.correct = (prog.correct || 0) + 1;
+    syncLevelProgress(STATE.currentLevel);
+  }
   addScore(10,correct);
   if (correct && STATE.reviewQueue.includes(q.id))
     STATE.reviewQueue=STATE.reviewQueue.filter(id=>id!==q.id);
@@ -365,10 +385,14 @@ function renderHomeScreen() {
   // Level grid
   const grid=document.getElementById('level-grid');
   if (!grid) return;
+  syncAllProgress();
   grid.innerHTML=LEVEL_INFO.map(info=>{
     const prog=STATE.progress[info.num]||{answered:0,correct:0,completed:false};
     const pct=info.total?Math.min(100,Math.round((prog.answered/info.total)*100)):0;
-    const locked=info.num>1 && !STATE.progress[info.num-1]?.completed && info.num!==STATE.level;
+    const prevInfo = LEVEL_INFO.find(l => l.num === info.num - 1);
+    const prevProg = STATE.progress[info.num-1];
+    const prevCompleted = !prevInfo || !prevInfo.total || !!prevProg?.completed || (prevProg?.answered || 0) >= prevInfo.total;
+    const locked=info.num>1 && !prevCompleted;
     const rightHTML = locked
       ? '<span style="font-size:1.1rem">🔒</span>'
       : `<span class="lv-pct">${pct}%</span><div class="lv-bar"><div class="lv-bar-fill" style="width:${pct}%"></div></div>`;
