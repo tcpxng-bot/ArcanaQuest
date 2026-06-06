@@ -150,7 +150,7 @@ function renderMinorSuitScreen(suit) {
           return `<div class="minor-card-item ${isViewed?'viewed':''}" onclick="goMinorCard(${card.id})"
             style="background:var(--bg2);border:1px solid ${isViewed ? meta.colorDim : 'var(--border)'};border-radius:14px;padding:14px 12px;cursor:pointer;position:relative;overflow:hidden">
             <div class="card-minor-img-wrap" style="aspect-ratio:2/3;border-radius:8px;background:linear-gradient(135deg,${meta.accent},var(--bg3));margin-bottom:10px;display:flex;align-items:center;justify-content:center;overflow:hidden">
-              <img src="${card.image}" alt="${card.name}" style="width:100%;height:100%;object-fit:cover"
+              <img src="${card.image}" alt="${card.name}" style="width:100%;height:100%;object-fit:contain;background:#080711"
                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%">
                 <span style="font-size:2rem">${meta.symbol}</span>
@@ -219,7 +219,7 @@ function showMinorTab(tab, btnEl, cardOverride) {
     body.innerHTML = `
       <div class="card-hero">
         <div style="width:100px;flex-shrink:0">
-          <img src="${card.image}" alt="${card.name}" style="width:100px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.5)"
+          <img src="${card.image}" alt="${card.name}" style="width:100px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.5);object-fit:contain;background:#080711"
             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div style="display:none;width:100px;aspect-ratio:2/3;border-radius:8px;background:linear-gradient(160deg,var(--bg3),#0d0820);border:1px solid var(--border);align-items:center;justify-content:center;flex-direction:column">
             <span style="font-size:2.5rem">${meta.symbol}</span>
@@ -395,7 +395,7 @@ function renderLibraryCard(card) {
 
   return `<div onclick="${clickFn}" style="background:var(--bg2);border:1px solid ${borderColor};border-radius:10px;padding:8px;cursor:pointer">
     <div style="aspect-ratio:2/3;border-radius:6px;background:var(--bg3);overflow:hidden;margin-bottom:6px;display:flex;align-items:center;justify-content:center">
-      <img src="${imgSrc}" alt="${card.name}" style="width:100%;height:100%;object-fit:cover"
+      <img src="${imgSrc}" alt="${card.name}" style="width:100%;height:100%;object-fit:contain;background:#080711"
         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%">
         <span style="font-size:1.5rem">${isMajor ? '✦' : meta.symbol}</span>
@@ -486,7 +486,7 @@ function drawSpread2() {
 
     return `<div style="text-align:center">
       <div style="width:70px;aspect-ratio:2/3;border-radius:6px;border:1px solid ${isMajor?'var(--gold-dim)':(meta.colorDim+'88')};background:var(--bg2);margin:0 auto 6px;overflow:hidden;${d.reversed?'transform:rotate(180deg)':''}">
-        <img src="${imgSrc}" alt="${d.card.name}" style="width:100%;height:100%;object-fit:cover"
+        <img src="${imgSrc}" alt="${d.card.name}" style="width:100%;height:100%;object-fit:contain;background:#080711"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.4rem">${fallbackIcon}</div>
       </div>

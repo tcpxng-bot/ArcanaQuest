@@ -26,58 +26,6 @@ function makeMinorId(suit, rank) {
   return 100 + suitOrder[suit] * 14 + rankOrder[rank];
 }
 
-function buildMinorCardImage(suit, rank, cardName) {
-  const art = {
-    wands:     { dark:'#30100c', light:'#e8a04a', glyph:'✦' },
-    cups:      { dark:'#081b38', light:'#78c7ff', glyph:'◡' },
-    swords:    { dark:'#160d35', light:'#c8b7ff', glyph:'✧' },
-    pentacles: { dark:'#09291d', light:'#7ee2ab', glyph:'⬟' },
-  }[suit];
-  const rankIndex = {
-    ace:1, two:2, three:3, four:4, five:5, six:6, seven:7,
-    eight:8, nine:9, ten:10, page:11, knight:12, queen:13, king:14
-  }[rank];
-  const positions = [
-    [150,115], [95,165], [205,165], [95,225], [205,225],
-    [150,225], [95,285], [205,285], [120,335], [180,335]
-  ];
-  const pipCount = Math.min(rankIndex, 10);
-  const pips = positions.slice(0, pipCount).map(([x, y], index) => `
-    <circle cx="${x}" cy="${y}" r="${index === 0 && rank === 'ace' ? 29 : 20}" fill="none" stroke="${art.light}" stroke-width="2" opacity=".85"/>
-    <text x="${x}" y="${y + 8}" text-anchor="middle" font-size="${index === 0 && rank === 'ace' ? 32 : 23}" fill="${art.light}">${art.glyph}</text>
-  `).join('');
-  const court = rankIndex > 10 ? `
-    <circle cx="150" cy="225" r="76" fill="none" stroke="${art.light}" stroke-width="2" opacity=".55"/>
-    <circle cx="150" cy="225" r="61" fill="${art.light}" opacity=".08"/>
-    <text x="150" y="248" text-anchor="middle" font-family="Georgia,serif" font-size="66" fill="${art.light}">${rank.charAt(0).toUpperCase()}</text>
-  ` : '';
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450">
-      <defs>
-        <radialGradient id="glow" cx="50%" cy="42%" r="68%">
-          <stop offset="0" stop-color="${art.light}" stop-opacity=".24"/>
-          <stop offset=".58" stop-color="${art.dark}"/>
-          <stop offset="1" stop-color="#07050f"/>
-        </radialGradient>
-        <pattern id="stars" width="42" height="42" patternUnits="userSpaceOnUse">
-          <circle cx="8" cy="9" r="1" fill="#fff" opacity=".38"/>
-          <circle cx="29" cy="27" r=".7" fill="#fff" opacity=".25"/>
-        </pattern>
-      </defs>
-      <rect width="300" height="450" rx="18" fill="url(#glow)"/>
-      <rect width="300" height="450" rx="18" fill="url(#stars)"/>
-      <rect x="13" y="13" width="274" height="424" rx="13" fill="none" stroke="${art.light}" stroke-width="2" opacity=".7"/>
-      <rect x="22" y="22" width="256" height="406" rx="9" fill="none" stroke="${art.light}" opacity=".25"/>
-      <path d="M42 76 Q150 35 258 76 M42 374 Q150 415 258 374" fill="none" stroke="${art.light}" opacity=".35"/>
-      <text x="150" y="61" text-anchor="middle" font-family="Georgia,serif" font-size="17" letter-spacing="2" fill="#fff">${cardName.toUpperCase()}</text>
-      ${pips}
-      ${court}
-      <text x="150" y="404" text-anchor="middle" font-family="Georgia,serif" font-size="13" letter-spacing="3" fill="${art.light}">${suit.toUpperCase()}</text>
-    </svg>
-  `;
-  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-}
-
 // ══════════════════════════════════════════════════════
 // WANDS — 14 ใบ
 // ══════════════════════════════════════════════════════
@@ -795,7 +743,7 @@ function buildMinorCards(suit, dataArr) {
     suitColor: meta.color,
     suitColorDim: meta.colorDim,
     suitAccent: meta.accent,
-    image: buildMinorCardImage(suit, d.rank, d.name),
+    image: `assets/minor/${suit}/${d.rank}.jpg`,
     symbol: meta.symbol,
     keywords: d.keywords,
     upright: d.upright,
