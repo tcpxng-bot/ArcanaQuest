@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tarot Debug</title>
+<style>
+body{background:#0a0e1a;color:#ddd;font-family:sans-serif;padding:20px;font-size:14px}
+.ok{color:#56c996}.err{color:#e05c5c}.warn{color:#c9a84c}
+.box{background:#111827;border:1px solid #333;border-radius:8px;padding:14px;margin:10px 0}
+h2{color:#c9a84c;margin:0 0 16px}
+pre{font-size:12px;overflow-x:auto;color:#9a9282;margin:4px 0}
+</style>
+</head>
+<body>
+<h2>🔮 Tarot Mastery — Diagnostic</h2>
+
+<div class="box" id="box-html">
+  <span class="ok">✓ HTML โหลดได้</span>
+</div>
+
+<div class="box" id="box-chapters">
+  <span class="warn">⟳ กำลังโหลด chapters.js...</span>
+</div>
+
+<div class="box" id="box-app">
+  <span class="warn">⟳ กำลังโหลด app.js...</span>
+</div>
+
+<div class="box" id="box-result">
+  <span class="warn">⟳ รอผล...</span>
+</div>
+
+<script>
+function ok(id,msg){document.getElementById(id).innerHTML='<span class="ok">✓ '+msg+'</span>'}
+function err(id,msg){document.getElementById(id).innerHTML='<span class="err">✗ '+msg+'</span>'}
+function set(id,html){document.getElementById(id).innerHTML=html}
+</script>
+
+<script src="chapters.js"
+  onload="ok('box-chapters','chapters.js โหลดได้')"
+  onerror="err('box-chapters','chapters.js โหลดไม่ได้ — ตรวจสอบชื่อไฟล์บน GitHub')">
+</script>
+
+<script src="app.js"
+  onload="ok('box-app','app.js โหลดได้')"
+  onerror="err('box-app','app.js โหลดไม่ได้ — ตรวจสอบชื่อไฟล์บน GitHub')">
+</script>
+
+<script>
+setTimeout(function(){
+  var r = [];
+
+  // Check CHAPTERS
+  if(typeof CHAPTERS === 'undefined'){
+    r.push('<span class="err">✗ CHAPTERS = undefined (chapters.js ไม่ execute)</span>');
+  } else {
+    r.push('<span class="ok">✓ CHAPTERS.length = '+CHAPTERS.length+'</span>');
+    r.push('<pre>ไพ่แรก: '+CHAPTERS[0].name+' | ไพ่สุดท้าย: '+CHAPTERS[CHAPTERS.length-1].name+'</pre>');
+  }
+
+  // Check STATE
+  if(typeof STATE === 'undefined'){
+    r.push('<span class="err">✗ STATE = undefined (app.js ไม่ execute)</span>');
+  } else {
+    r.push('<span class="ok">✓ STATE โหลดได้, streak='+STATE.streak+'</span>');
+  }
+
+  // Check render functions
+  if(typeof renderHomeScreen === 'function'){
+    r.push('<span class="ok">✓ renderHomeScreen พร้อมใช้</span>');
+  } else {
+    r.push('<span class="err">✗ renderHomeScreen ไม่ถูก define</span>');
+  }
+
+  set('box-result', r.join('<br>'));
+}, 2000);
+</script>
+
+</body>
+</html>
