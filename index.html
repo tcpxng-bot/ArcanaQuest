@@ -1,37 +1,149 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-  <meta name="theme-color" content="#0d1117"/>
-  <title>Tarot Mastery · เรียนรู้ไพ่ทาโรต์</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=20260605c"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Tarot Mastery</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<!-- ═══════════════ APP SHELL ═══════════════ -->
 <div id="app">
 
-  <!-- TOP BAR (shown when not on home) -->
-  <header id="top-bar" class="top-bar hidden">
-    <button class="back-btn" onclick="navBack()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
-    </button>
-    <span id="top-bar-title"></span>
-    <button id="sound-btn" class="icon-btn" onclick="toggleSound()">🔊</button>
-  </header>
+  <!-- HOME SCREEN -->
+  <div class="screen active" id="screen-home">
 
-  <!-- ═══════════ SCREEN: HOME ═══════════ -->
-  <div id="screen-home" class="screen active">
+    <!-- scrollable area -->
+    <div class="home-scroll">
+      <div class="home-hero">
+        <span class="home-star">✦</span>
+        <h1 class="home-title">Tarot Mastery</h1>
+        <p class="home-sub">เรียนรู้ไพ่ Major Arcana 22 ใบ</p>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-box">
+          <span class="stat-val" id="stat-xp">0</span>
+          <span class="stat-lbl">XP</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val" id="stat-badge">—</span>
+          <span class="stat-lbl">Badge</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val" id="stat-streak">0 🌱</span>
+          <span class="stat-lbl">Streak</span>
+        </div>
+      </div>
 
-    <!-- Hero -->
-    <div class="home-hero">
-      <div class="hero-emblem">✦</div>
-      <h1 class="hero-title">Tarot Mastery</h1>
-      <p class="hero-sub">เรียนรู้ไพ่ Major Arcana 22 ใบ</p>
-      <!-- XP + badge bar -->
-      <div class="hero-stats">
-        <div class="hstat">
+      <!-- tab content -->
+      <div class="tab-pane active" data-tab="journey">
+        <div class="section-title">Journey of the Fool — 22 บทเรียน</div>
+        <div class="journey-grid" id="journey-grid"></div>
+        <div id="exam-cta" style="display:none;padding:0 16px 24px">
+          <div class="practice-cta">
+            <h3>🏆 พร้อมสอบแล้ว!</h3>
+            <p>คุณเรียนครบทุก 22 บทเรียน — ลองสอบ Major Arcana Master Exam</p>
+            <br><button class="btn-gold" onclick="goExam()">สอบ Master Exam</button>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" data-tab="practice">
+        <div id="practice-content" style="padding-bottom:24px"></div>
+      </div>
+      <div class="tab-pane" data-tab="journal">
+        <div class="journal-header">
+          <h2>📖 สมุดบันทึก</h2>
+          <p style="font-size:.82rem;color:var(--text2);margin-top:4px">Reflections จากการเรียนรู้ของคุณ</p>
+        </div>
+        <div class="journal-list" id="journal-entries"></div>
+      </div>
+      <div class="tab-pane" data-tab="awards">
+        <div class="section-title">Badges &amp; Achievements</div>
+        <div class="award-list" id="awards-list"></div>
+        <div style="padding:8px 16px 24px;text-align:center">
+          <button class="btn-outline" onclick="resetData()" style="font-size:.75rem;opacity:.5">รีเซ็ตข้อมูล</button>
+        </div>
+      </div>
+    </div>
+    <!-- /home-scroll -->
+
+    <!-- tab nav LAST = bottom -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="journey"><span class="t-icon">🗺</span>เส้นทาง</button>
+      <button class="tab-btn" data-tab="practice"><span class="t-icon">🎯</span>ฝึกสอบ</button>
+      <button class="tab-btn" data-tab="journal"><span class="t-icon">📖</span>บันทึก</button>
+      <button class="tab-btn" data-tab="awards"><span class="t-icon">🏅</span>รางวัล</button>
+    </nav>
+  </div>
+  <!-- /screen-home -->
+
+  <!-- CHAPTER SCREEN -->
+  <div class="screen" id="screen-chapter">
+    <div class="ch-top-bar">
+      <button class="ch-back" onclick="goHome()">←</button>
+      <div class="ch-title-wrap">
+        <div class="ch-title-en" id="ch-title-en">—</div>
+        <div class="ch-title-th" id="ch-title-th">—</div>
+      </div>
+      <div class="ch-num-badge" id="ch-num">—</div>
+    </div>
+    <div class="ch-tabs" id="ch-tabs"></div>
+    <div class="ch-body" id="ch-body"></div>
+  </div>
+
+  <!-- EXAM SCREEN -->
+  <div class="screen" id="screen-exam"></div>
+
+  <!-- READING LAB SCREEN -->
+  <div class="screen" id="screen-reading">
+    <div class="top-bar-full">
+      <button class="top-bar-back" onclick="goHome()">←</button>
+      <div>
+        <div style="font-family:'Cinzel',serif;font-size:.95rem;color:var(--cream)">Reading Lab</div>
+        <div style="font-size:.78rem;color:var(--text2)">ลองอ่านไพ่พื้นฐาน</div>
+      </div>
+    </div>
+    <div class="reading-lab-intro">
+      <h2>🃏 Reading Lab</h2>
+      <p>สุ่มไพ่และฝึกอ่านด้วยตนเอง</p>
+    </div>
+    <div class="spread-picker">
+      <button class="spread-btn active" onclick="setSpread(1,this)">1 ใบ — ไพ่แห่งวัน</button>
+      <button class="spread-btn" onclick="setSpread(3,this)">3 ใบ — อดีต/ปัจจุบัน/อนาคต</button>
+      <button class="spread-btn" onclick="setSpread(5,this)">5 ใบ — Celtic Cross ย่อ</button>
+    </div>
+    <div class="spread-area">
+      <div id="spread-cards" class="spread-cards"></div>
+      <button class="btn-gold" style="display:block;margin:0 auto 16px" onclick="drawSpread()">✦ สุ่มไพ่</button>
+      <div id="spread-output" class="spread-reading-output" style="display:none"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="chapters.js"></script>
+<script src="app.js"></script>
+<script src="chapter.js"></script>
+<script src="exam.js"></script>
+<script>
+var spreadCount = 1;
+var SPREAD_LABELS = {1:['ไพ่แห่งวัน'],3:['อดีต','ปัจจุบัน','อนาคต'],5:['สถานการณ์','อุปสรรค','รากเหตุ','แนวทาง','ผลลัพธ์']};
+function setSpread(n,el){spreadCount=n;document.querySelectorAll('.spread-btn').forEach(function(b){b.classList.remove('active')});el.classList.add('active');document.getElementById('spread-cards').innerHTML='';document.getElementById('spread-output').style.display='none';}
+function drawSpread(){
+  var pool=CHAPTERS.slice(),drawn=[];
+  while(drawn.length<spreadCount){var idx=Math.floor(Math.random()*pool.length);var ch=pool.splice(idx,1)[0];drawn.push({ch:ch,reversed:Math.random()>0.7});}
+  var labels=SPREAD_LABELS[spreadCount]||[];
+  var cardsHTML=drawn.map(function(d,i){
+    var src=CARD_IMAGES[d.ch.id];
+    return '<div class="spread-slot"><div class="spread-slot-img'+(d.reversed?' reversed':'')+'"><img src="'+src+'" alt="'+d.ch.name+'"></div><div class="spread-slot-lbl">'+(labels[i]||'')+'</div><div style="font-size:.7rem;color:var(--gold);font-family:Cinzel,serif">'+d.ch.name+'</div>'+(d.reversed?'<div style="font-size:.65rem;color:var(--danger)">กลับหัว</div>':'')+'</div>';
+  }).join('');
+  document.getElementById('spread-cards').innerHTML=cardsHTML;
+  var out=document.getElementById('spread-output');out.style.display='block';
+  out.innerHTML=drawn.map(function(d,i){
+    var lbl=labels[i]?'<strong style="color:var(--gold)">'+labels[i]+':</strong> ':'';
+    var meaning=d.reversed?d.ch.reversed:d.ch.meaning;
+    return '<p style="margin-bottom:12px">'+lbl+'<strong>'+d.ch.name+'</strong>'+(d.reversed?' (กลับหัว)':'')+'<br><span style="color:var(--text2);font-size:.85rem">'+meaning+'</span></p>';
+  }).join('');
+}
+</script>
+</body>
+</html>
