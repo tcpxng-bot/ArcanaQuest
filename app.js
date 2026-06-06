@@ -297,10 +297,10 @@ function resetData() {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  // Tab navigation
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+// Scripts are at end of <body> so DOM is already ready — no DOMContentLoaded needed
+function initApp() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
       STATE.activeTab = btn.dataset.tab;
       saveState();
       renderHomeScreen();
@@ -308,4 +308,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   renderHomeScreen();
   checkBadges();
-});
+}
+
+// Run immediately (DOM ready) or on DOMContentLoaded as fallback
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}

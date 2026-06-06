@@ -120,10 +120,10 @@
 
 </div>
 
-<script src="chapters.js"></script>
-<script src="app.js"></script>
-<script src="chapter.js"></script>
-<script src="exam.js"></script>
+<script src="chapters.js?v=1350"></script>
+<script src="app.js?v=1350"></script>
+<script src="chapter.js?v=1350"></script>
+<script src="exam.js?v=1350"></script>
 <script>
 var spreadCount = 1;
 var SPREAD_LABELS = {1:['ไพ่แห่งวัน'],3:['อดีต','ปัจจุบัน','อนาคต'],5:['สถานการณ์','อุปสรรค','รากเหตุ','แนวทาง','ผลลัพธ์']};
@@ -144,6 +144,20 @@ function drawSpread(){
     return '<p style="margin-bottom:12px">'+lbl+'<strong>'+d.ch.name+'</strong>'+(d.reversed?' (กลับหัว)':'')+'<br><span style="color:var(--text2);font-size:.85rem">'+meaning+'</span></p>';
   }).join('');
 }
+</script>
+<script>
+// Fallback: if app.js initApp didn't fire, try after short delay
+setTimeout(function() {
+  var grid = document.getElementById('journey-grid');
+  if (!grid) return;
+  if (grid.innerHTML.trim() === '') {
+    if (typeof initApp === 'function') {
+      initApp();
+    } else if (typeof STATE === 'undefined') {
+      grid.innerHTML = '<div style="padding:24px 16px;color:#c9a84c;font-size:.85rem;text-align:center">⚠️ JavaScript ไม่โหลด — ลอง Hard Refresh<br><br><button onclick="location.reload(true)" style="background:#c9a84c;color:#000;border:none;padding:8px 16px;border-radius:8px;font-size:.85rem">Reload</button></div>';
+    }
+  }
+}, 1500);
 </script>
 </body>
 </html>
