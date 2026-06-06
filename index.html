@@ -3,22 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Tarot Mastery</title>
-  <link rel="stylesheet" href="style.css?v=20260606-2">
+  <title>Arcana Quest — ไพ่ทาโรต์ 78 ใบ</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="minor-style.css">
 </head>
 <body>
 <div id="app">
 
-  <!-- HOME SCREEN -->
+  <!-- ═══════════════════════════════
+       HOME SCREEN
+  ═══════════════════════════════ -->
   <div class="screen active" id="screen-home">
-
-    <!-- scrollable area -->
     <div class="home-scroll">
       <div class="home-hero">
         <span class="home-star">✦</span>
-        <h1 class="home-title">Tarot Mastery</h1>
-        <p class="home-sub">เรียนรู้ไพ่ Major Arcana 22 ใบ</p>
+        <h1 class="home-title">Arcana Quest</h1>
+        <p class="home-sub">ไพ่ทาโรต์ 78 ใบ — Major & Minor Arcana</p>
       </div>
+
+      <!-- Stats bar -->
       <div class="stats-bar">
         <div class="stat-box">
           <span class="stat-val" id="stat-xp">0</span>
@@ -34,17 +37,34 @@
         </div>
       </div>
 
-      <!-- tab content -->
-      <div class="tab-pane active" data-tab="journey">
-        <div class="section-title">Journey of the Fool — 22 บทเรียน</div>
-        <div class="journey-grid" id="journey-grid"></div>
-        <div id="exam-cta" style="display:none;padding:0 16px 24px">
-          <div class="practice-cta">
-            <h3>🏆 พร้อมสอบแล้ว!</h3>
-            <p>คุณเรียนครบทุก 22 บทเรียน — ลองสอบ Major Arcana Master Exam</p>
-            <br><button class="btn-gold" onclick="goExam()">สอบ Master Exam</button>
+      <!-- Progress 78 -->
+      <div id="progress-78" style="margin:0 16px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-bottom:12px">
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:1rem;color:var(--gold2)" id="prog-major-count">0</div>
+            <div style="font-size:.7rem;color:var(--text2)">Major 22</div>
+          </div>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:1rem;color:var(--accent2)" id="prog-minor-count">0</div>
+            <div style="font-size:.7rem;color:var(--text2)">Minor 56</div>
+          </div>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:1rem;color:var(--success)" id="prog-total-count">0</div>
+            <div style="font-size:.7rem;color:var(--text2)">Total 78</div>
           </div>
         </div>
+        <div style="height:6px;background:var(--bg3);border-radius:3px;overflow:hidden">
+          <div id="prog-total-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--gold-dim),var(--success));transition:width .5s;border-radius:3px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <button onclick="goLibrary()" style="background:none;border:1px solid var(--border);color:var(--gold);padding:3px 10px;border-radius:20px;font-size:.72rem;cursor:pointer;font-family:'Cinzel',serif">📚 Library 78 ใบ</button>
+          <button onclick="goReadingLab()" style="background:none;border:1px solid var(--border);color:var(--accent2);padding:3px 10px;border-radius:20px;font-size:.72rem;cursor:pointer;font-family:'Cinzel',serif">🃏 Reading Lab</button>
+        </div>
+      </div>
+
+      <!-- Tab panes -->
+      <div class="tab-pane active" data-tab="journey">
+        <div class="journey-grid" id="journey-grid"></div>
       </div>
       <div class="tab-pane" data-tab="practice">
         <div id="practice-content" style="padding-bottom:24px"></div>
@@ -57,16 +77,15 @@
         <div class="journal-list" id="journal-entries"></div>
       </div>
       <div class="tab-pane" data-tab="awards">
-        <div class="section-title">Badges &amp; Achievements</div>
+        <div class="section-title">Badges & Achievements</div>
         <div class="award-list" id="awards-list"></div>
         <div style="padding:8px 16px 24px;text-align:center">
           <button class="btn-outline" onclick="resetData()" style="font-size:.75rem;opacity:.5">รีเซ็ตข้อมูล</button>
         </div>
       </div>
     </div>
-    <!-- /home-scroll -->
 
-    <!-- tab nav LAST = bottom -->
+    <!-- Tab nav -->
     <nav class="tab-nav">
       <button class="tab-btn active" data-tab="journey"><span class="t-icon">🗺</span>เส้นทาง</button>
       <button class="tab-btn" data-tab="practice"><span class="t-icon">🎯</span>ฝึกสอบ</button>
@@ -74,9 +93,10 @@
       <button class="tab-btn" data-tab="awards"><span class="t-icon">🏅</span>รางวัล</button>
     </nav>
   </div>
-  <!-- /screen-home -->
 
-  <!-- CHAPTER SCREEN -->
+  <!-- ═══════════════════════════════
+       CHAPTER SCREEN (Major)
+  ═══════════════════════════════ -->
   <div class="screen" id="screen-chapter">
     <div class="ch-top-bar">
       <button class="ch-back" onclick="goHome()">←</button>
@@ -90,74 +110,140 @@
     <div class="ch-body" id="ch-body"></div>
   </div>
 
-  <!-- EXAM SCREEN -->
+  <!-- ═══════════════════════════════
+       EXAM SCREEN
+  ═══════════════════════════════ -->
   <div class="screen" id="screen-exam"></div>
 
-  <!-- READING LAB SCREEN -->
-  <div class="screen" id="screen-reading">
-    <div class="top-bar-full">
-      <button class="top-bar-back" onclick="goHome()">←</button>
-      <div>
-        <div style="font-family:'Cinzel',serif;font-size:.95rem;color:var(--cream)">Reading Lab</div>
-        <div style="font-size:.78rem;color:var(--text2)">ลองอ่านไพ่พื้นฐาน</div>
+  <!-- ═══════════════════════════════
+       READING LAB SCREEN (upgraded)
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-reading"></div>
+
+  <!-- ═══════════════════════════════
+       MINOR SUIT SCREEN
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-minor-suit"></div>
+
+  <!-- ═══════════════════════════════
+       MINOR CARD DETAIL SCREEN
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-minor-card">
+    <div class="ch-top-bar">
+      <button class="ch-back" id="minor-card-back" onclick="if(currentMinorSuit)goMinorSuit(currentMinorSuit);else goHome()">←</button>
+      <div class="ch-title-wrap">
+        <div class="ch-title-en" id="mc-title-en">—</div>
+        <div class="ch-title-th" id="mc-title-th">—</div>
       </div>
+      <div class="ch-num-badge" id="mc-suit-badge">—</div>
     </div>
-    <div class="reading-lab-intro">
-      <h2>🃏 Reading Lab</h2>
-      <p>สุ่มไพ่และฝึกอ่านด้วยตนเอง</p>
-    </div>
-    <div class="spread-picker">
-      <button class="spread-btn active" onclick="setSpread(1,this)">1 ใบ — ไพ่แห่งวัน</button>
-      <button class="spread-btn" onclick="setSpread(3,this)">3 ใบ — อดีต/ปัจจุบัน/อนาคต</button>
-      <button class="spread-btn" onclick="setSpread(5,this)">5 ใบ — Celtic Cross ย่อ</button>
-    </div>
-    <div class="spread-area">
-      <div id="spread-cards" class="spread-cards"></div>
-      <button class="btn-gold" style="display:block;margin:0 auto 16px" onclick="drawSpread()">✦ สุ่มไพ่</button>
-      <div id="spread-output" class="spread-reading-output" style="display:none"></div>
-    </div>
+    <div class="ch-tabs" id="minor-card-tabs"></div>
+    <div class="ch-body" id="minor-card-body"></div>
   </div>
+
+  <!-- ═══════════════════════════════
+       CARD LIBRARY SCREEN
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-library"></div>
+
+  <!-- ═══════════════════════════════
+       MINOR QUIZ SCREEN
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-minor-quiz"></div>
 
 </div>
 
-<script src="chapters.js?v=1350"></script>
-<script src="app.js?v=1350"></script>
-<script src="chapter.js?v=1350"></script>
-<script src="exam.js?v=1350"></script>
+<!-- ── JS: Load order matters ── -->
+<script src="chapters.js?v=20260606"></script>
+<script src="minor-data.js?v=20260606"></script>
+<script src="app.js?v=20260606"></script>
+<script src="chapter.js?v=20260606"></script>
+<script src="exam.js?v=20260606"></script>
+<script src="minor-ui.js?v=20260606"></script>
+
 <script>
-var spreadCount = 1;
-var SPREAD_LABELS = {1:['ไพ่แห่งวัน'],3:['อดีต','ปัจจุบัน','อนาคต'],5:['สถานการณ์','อุปสรรค','รากเหตุ','แนวทาง','ผลลัพธ์']};
-function setSpread(n,el){spreadCount=n;document.querySelectorAll('.spread-btn').forEach(function(b){b.classList.remove('active')});el.classList.add('active');document.getElementById('spread-cards').innerHTML='';document.getElementById('spread-output').style.display='none';}
-function drawSpread(){
-  var pool=CHAPTERS.slice(),drawn=[];
-  while(drawn.length<spreadCount){var idx=Math.floor(Math.random()*pool.length);var ch=pool.splice(idx,1)[0];drawn.push({ch:ch,reversed:Math.random()>0.7});}
-  var labels=SPREAD_LABELS[spreadCount]||[];
-  var cardsHTML=drawn.map(function(d,i){
-    var src=CARD_IMAGES[d.ch.id];
-    return '<div class="spread-slot"><div class="spread-slot-img'+(d.reversed?' reversed':'')+'"><img src="'+src+'" alt="'+d.ch.name+'"></div><div class="spread-slot-lbl">'+(labels[i]||'')+'</div><div style="font-size:.7rem;color:var(--gold);font-family:Cinzel,serif">'+d.ch.name+'</div>'+(d.reversed?'<div style="font-size:.65rem;color:var(--danger)">กลับหัว</div>':'')+'</div>';
-  }).join('');
-  document.getElementById('spread-cards').innerHTML=cardsHTML;
-  var out=document.getElementById('spread-output');out.style.display='block';
-  out.innerHTML=drawn.map(function(d,i){
-    var lbl=labels[i]?'<strong style="color:var(--gold)">'+labels[i]+':</strong> ':'';
-    var meaning=d.reversed?d.ch.reversed:d.ch.meaning;
-    return '<p style="margin-bottom:12px">'+lbl+'<strong>'+d.ch.name+'</strong>'+(d.reversed?' (กลับหัว)':'')+'<br><span style="color:var(--text2);font-size:.85rem">'+meaning+'</span></p>';
-  }).join('');
+// ── Init & tab binding ──────────────────────────────
+function initAppFull() {
+  // Tab buttons
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      STATE.activeTab = btn.dataset.tab;
+      saveState();
+      renderHomeScreen();
+    });
+  });
+
+  updateStreak();
+  renderHomeScreen();
+  renderProgressBar();
+  checkBadges();
+  checkMinorBadges();
 }
-</script>
-<script>
-// Fallback: if app.js initApp didn't fire, try after short delay
+
+function renderProgressBar() {
+  var done = (typeof completedCount === 'function') ? completedCount() : 0;
+  var minorDone = (typeof getMinorTotalViewed === 'function') ? getMinorTotalViewed() : 0;
+  var total = done + minorDone;
+  var pct = Math.round(total / 78 * 100);
+
+  var el = document.getElementById('prog-major-count');
+  if (el) el.textContent = done;
+  el = document.getElementById('prog-minor-count');
+  if (el) el.textContent = minorDone;
+  el = document.getElementById('prog-total-count');
+  if (el) el.textContent = total;
+  el = document.getElementById('prog-total-bar');
+  if (el) el.style.width = pct + '%';
+}
+
+// Patch renderHomeScreen to update progress bar too
+var _origRenderHome = renderHomeScreen;
+window.renderHomeScreen = function() {
+  _origRenderHome();
+  renderProgressBar();
+
+  // Render correct tab content
+  var tab = STATE.activeTab || 'journey';
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+  document.querySelectorAll('.tab-pane').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.tab === tab);
+  });
+
+  if (tab === 'journey') {
+    if (typeof renderJourneyGrid === 'function') renderJourneyGrid();
+  }
+  if (tab === 'practice') {
+    if (typeof renderPracticeTab === 'function') renderPracticeTab();
+  }
+  if (tab === 'journal') {
+    if (typeof renderJournal === 'function') renderJournal();
+  }
+  if (tab === 'awards') {
+    if (typeof renderAwards === 'function') renderAwards();
+  }
+};
+
+// Also patch goReadingLab to use new version
+window.goReadingLab = function() {
+  showScreen('screen-reading');
+  if (typeof renderReadingLab === 'function') renderReadingLab();
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAppFull);
+} else {
+  initAppFull();
+}
+
+// Fallback safety
 setTimeout(function() {
   var grid = document.getElementById('journey-grid');
-  if (!grid) return;
-  if (grid.innerHTML.trim() === '') {
-    if (typeof initApp === 'function') {
-      initApp();
-    } else if (typeof STATE === 'undefined') {
-      grid.innerHTML = '<div style="padding:24px 16px;color:#c9a84c;font-size:.85rem;text-align:center">⚠️ JavaScript ไม่โหลด — ลอง Hard Refresh<br><br><button onclick="location.reload(true)" style="background:#c9a84c;color:#000;border:none;padding:8px 16px;border-radius:8px;font-size:.85rem">Reload</button></div>';
-    }
+  if (grid && grid.innerHTML.trim() === '') {
+    initAppFull();
   }
-}, 1500);
+}, 1200);
 </script>
 </body>
 </html>
