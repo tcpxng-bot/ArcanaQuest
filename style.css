@@ -644,3 +644,19 @@ body {
   .journey-grid { grid-template-columns: repeat(3, 1fr); }
   .ch-body { max-width: 640px; margin: 0 auto; }
 }
+
+/* Desktop app frame */
+@media (min-width: 600px) {
+  body {
+    display: flex;
+    justify-content: center;
+  }
+  #app {
+    width: min(100%, 480px) !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+  .journey-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
