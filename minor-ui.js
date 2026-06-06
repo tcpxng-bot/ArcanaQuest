@@ -84,11 +84,13 @@ function checkMinorBadges() {
 }
 
 // Extend main checkBadges to also check minor
-const _origCheckBadges = (typeof checkBadges === 'function') ? checkBadges : function(){};
-function checkBadges() {
+const _origCheckBadges = (typeof window.checkBadges === 'function')
+  ? window.checkBadges.bind(window)
+  : function(){};
+window.checkBadges = function checkAllBadges() {
   _origCheckBadges();
   checkMinorBadges();
-}
+};
 
 // ══════════════════════════════════════════════════════
 // SUIT SCREEN (Minor landing/selection)
@@ -132,13 +134,13 @@ function renderMinorSuitScreen(suit) {
       <div style="font-size:.78rem;color:var(--gold);font-family:'Cinzel',serif">${viewed}/14</div>
     </div>
     <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px">
-      <div class="suit-hero" style="background:linear-gradient(135deg,${meta.suitAccent.replace('rgba','rgba').replace(')',',0.5)')},transparent);padding:24px 16px;text-align:center;border-bottom:1px solid var(--border)">
+      <div class="suit-hero" style="background:linear-gradient(135deg,${meta.accent},transparent);padding:24px 16px;text-align:center;border-bottom:1px solid var(--border)">
         <div style="font-size:3rem;margin-bottom:8px">${meta.symbol}</div>
         <div style="font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--cream)">${suit.charAt(0).toUpperCase()+suit.slice(1)}</div>
         <div style="color:${meta.color};font-family:'Cinzel',serif;font-size:.85rem;margin:4px 0">${suitNameTH} · ${meta.element}</div>
         <div style="display:flex;justify-content:center;gap:8px;margin-top:12px">
           <div style="background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.75rem;color:var(--text2)">${viewed} / 14 ใบ</div>
-          <div style="background:${meta.suitAccent};border:1px solid ${meta.colorDim};border-radius:20px;padding:4px 12px;font-size:.75rem;color:${meta.color}">Minor Arcana</div>
+          <div style="background:${meta.accent};border:1px solid ${meta.colorDim};border-radius:20px;padding:4px 12px;font-size:.75rem;color:${meta.color}">Minor Arcana</div>
         </div>
       </div>
       <div style="padding:16px;font-family:'Cinzel',serif;font-size:.72rem;color:var(--text2);letter-spacing:.12em;text-transform:uppercase">ไพ่ทั้ง 14 ใบ</div>
@@ -147,7 +149,7 @@ function renderMinorSuitScreen(suit) {
           const isViewed = getMinorProgress()[card.id] && getMinorProgress()[card.id].viewed;
           return `<div class="minor-card-item ${isViewed?'viewed':''}" onclick="goMinorCard(${card.id})"
             style="background:var(--bg2);border:1px solid ${isViewed ? meta.colorDim : 'var(--border)'};border-radius:14px;padding:14px 12px;cursor:pointer;position:relative;overflow:hidden">
-            <div class="card-minor-img-wrap" style="aspect-ratio:2/3;border-radius:8px;background:linear-gradient(135deg,${meta.suitAccent},var(--bg3));margin-bottom:10px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+            <div class="card-minor-img-wrap" style="aspect-ratio:2/3;border-radius:8px;background:linear-gradient(135deg,${meta.accent},var(--bg3));margin-bottom:10px;display:flex;align-items:center;justify-content:center;overflow:hidden">
               <img src="${card.image}" alt="${card.name}" style="width:100%;height:100%;object-fit:cover"
                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%">
@@ -227,10 +229,10 @@ function showMinorTab(tab, btnEl, cardOverride) {
           <div class="card-meta-title">${card.name}</div>
           <div class="card-meta-th">${card.nameTH}</div>
           <div class="tag-row">
-            <span class="tag" style="border-color:${meta.colorDim};color:${meta.color};background:${meta.suitAccent}">${meta.symbol} ${card.suit.charAt(0).toUpperCase()+card.suit.slice(1)}</span>
+            <span class="tag" style="border-color:${meta.colorDim};color:${meta.color};background:${meta.accent}">${meta.symbol} ${card.suit.charAt(0).toUpperCase()+card.suit.slice(1)}</span>
             <span class="tag gold">🌍 ${card.element}</span>
           </div>
-          <div class="kw-wrap">${card.keywords.map(k=>`<span class="kw-chip" style="border-color:${meta.colorDim+'66'};color:${meta.color};background:${meta.suitAccent}">${k}</span>`).join('')}</div>
+          <div class="kw-wrap">${card.keywords.map(k=>`<span class="kw-chip" style="border-color:${meta.colorDim+'66'};color:${meta.color};background:${meta.accent}">${k}</span>`).join('')}</div>
         </div>
       </div>
       <div class="section-label">เรื่องเล่าของไพ่</div>
@@ -248,7 +250,7 @@ function showMinorTab(tab, btnEl, cardOverride) {
         <p class="prose">${card.reversed}</p>
       </div>
       <div class="section-label">Keywords</div>
-      <div class="kw-wrap">${card.keywords.map(k=>`<span class="kw-chip" style="border-color:${meta.colorDim+'66'};color:${meta.color};background:${meta.suitAccent}">${k}</span>`).join('')}</div>
+      <div class="kw-wrap">${card.keywords.map(k=>`<span class="kw-chip" style="border-color:${meta.colorDim+'66'};color:${meta.color};background:${meta.accent}">${k}</span>`).join('')}</div>
       <div class="section-label">ข้อมูลไพ่</div>
       <div class="meaning-box">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.85rem">
