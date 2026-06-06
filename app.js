@@ -113,8 +113,9 @@ function goExam() {
 }
 
 function goJournal() {
-  showScreen('screen-journal');
-  renderJournal();
+  STATE.activeTab = 'journal';
+  saveState();
+  goHome();
 }
 
 function goReadingLab() {

@@ -228,7 +228,7 @@ function showQuizResult() {
 
   // save progress
   const prog = getChapterProg(ch.id);
-  prog.quizDone = true;
+  if (pass) prog.quizDone = true;
   prog.quizScore = Math.max(prog.quizScore || 0, pct);
   STATE.totalXP += pass ? 30 : 10;
   saveState();

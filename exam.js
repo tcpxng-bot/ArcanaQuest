@@ -52,7 +52,7 @@ function buildExamStartScreen() {
       ${done < 22
         ? `<p style="color:var(--danger);font-size:.85rem;margin-bottom:16px">⚠️ เรียนให้ครบทุก 22 บทก่อนนะ (${done}/22)</p>`
         : ''}
-      <button class="btn-gold" onclick="startExam()" ${done < 22 ? 'style="opacity:.5"' : ''}>
+      <button class="btn-gold" onclick="startExam()" ${done < 22 ? 'disabled style="opacity:.5;cursor:not-allowed"' : ''}>
         เริ่มสอบเลย ✦
       </button>
     </div>
@@ -79,6 +79,11 @@ function buildExamPassedScreen() {
 }
 
 function startExam() {
+  if (completedCount() < 22) {
+    showToast('เรียนให้ครบทั้ง 22 บทก่อนเริ่ม Master Exam');
+    return;
+  }
+
   // Build 50-question pool from all chapters
   const allQ = [];
   CHAPTERS.forEach(ch => {

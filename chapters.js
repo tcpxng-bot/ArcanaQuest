@@ -1,4 +1,11 @@
-1 
+const CARD_IMAGES = {
+  0:'assets/cards/RWS_Tarot_00_Fool.jpg',
+  1:'assets/cards/RWS_Tarot_01_Magician.jpg',
+  2:'assets/cards/RWS_Tarot_02_High_Priestess.jpg',
+  3:'assets/cards/RWS_Tarot_03_Empress.jpg',
+  4:'assets/cards/RWS_Tarot_04_Emperor.jpg',
+  5:'assets/cards/RWS_Tarot_05_Hierophant.jpg',
+  6:'assets/cards/RWS_Tarot_06_Lovers.jpg',
   7:'assets/cards/RWS_Tarot_07_Chariot.jpg',
   8:'assets/cards/RWS_Tarot_08_Strength.jpg',
   9:'assets/cards/RWS_Tarot_09_Hermit.jpg',
